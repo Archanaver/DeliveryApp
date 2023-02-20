@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+   <body>
+      <form action = "{{ url_for('login_user')}}" method = "POST">
+        <h3>Login</h3>
+        Email
+        <input type="email" name="email"/>
+        Password
+        <input type="password" name="password" />
+        <input type = "submit" value = "Login" />
+      </form>
+        
+      <button   onClick="window.location.href='/register';">Register</button>
+       
+      
+   </body>
+</html>

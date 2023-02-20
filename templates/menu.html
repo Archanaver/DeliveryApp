@@ -1,0 +1,12 @@
+
+{% block y %}
+        <div>
+                        <a href="/home">HOME  </a>|
+                 {% if user %}
+                        <a href="/profile"> {{ user[2].capitalize() }}  </a>| 
+                        <a href="/logout"> LOGOUT </a>
+                {% else %}
+                         <a href="/login">LOGIN</a>
+                {% endif %}  
+        </div>   
+{% endblock %}

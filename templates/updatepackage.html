@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <h1>Update Package</h1>
+        <form action = "{{ url_for('package_updated')}}" method = "POST">
+            Lat
+            <input type="number" name ="lat" value="{{package['lat']}}"/>
+            Lon
+            <input type="number" name="lon" value="{{package['lon']}}"/>
+            Price
+            <input type="number" name="price" value="{{package['price']}}"/>
+            <button type="submit" name="id-update" value="{{ package['id-update'] }}">Update</button>
+            
+        </form>
+        
+    </body>
+</html>

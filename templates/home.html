@@ -1,0 +1,57 @@
+<html>
+       {% include "menu.html" %}
+
+        
+    <h1>Welcome {{user[2]}} !</h1>
+    <body>
+        <div>
+            <button onClick="window.location.href='/enterpackage';">Add package</button>
+        </div>
+        
+        <br>
+        {% if packages %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Lat</th>
+                <th>Lon</th>
+                <th>Price</th>
+                <th></th>
+                <th></th>
+            </tr>
+            
+         
+            {% for package in packages %}
+            <tr>
+                <td>{{ package[0] }}</td>
+                <td>{{ package[1] }}</td>
+                <td>{{ package[2] }}</td>
+                <td>{{ package[3] }}</td>
+                <td>
+                    <form action = "{{ url_for('delete_package')}}" method = "POST">
+                        <button type="submit" name="id-delete" value="{{ package[0] }}">Delete</button>
+                    </form> 
+                </td>
+                <td>
+                    <form action = "{{ url_for('update_package')}}" method = "POST">
+                        <button type="submit" name="id-update" value="{{ package[0] }}">Update</button>
+                        <input type="hidden" name="lat" value="{{ package[1] }}">
+                        <input type="hidden" name="lon" value="{{ package[2] }}">
+                        <input type="hidden" name="price" value="{{ package[3] }}">
+                    </form>
+                    
+                </td>
+            </tr>    
+            {% endfor %} 
+            
+        </table>
+        {% endif %}
+    </body>
+</html>
+  
+
+
+    
+
+
+ 
