@@ -10,14 +10,12 @@
             <input type="text" name="lastname1" value="{{ user['lastname1']}}"/>
             Second last name
             <input type="text" name="lastname2" value="{{ user['lastname2']}}"/>
-            First last name
-            <input type="text" name="lastname1" value="{{ user['lastname1']}}"/>
             Email
-            <input type="email" name="email" value="{{ user['email']}}"/>
+            <input type="email" name="email" value="{{ user['email']}}" readonly/>
             Username
             <input type="text" name="username" value="{{ user['username']}}"/>
             Password
-            <input type="password" name="password" />
+            <input type="password" name="password" value="{{ user['password']}}"/>
             <button type="submit" name="userid" value="{{user['user_id']}}">Update</button>   
         </form>
        

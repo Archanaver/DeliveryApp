@@ -244,6 +244,7 @@ def get_profile():
                 user['lastname2'] = user_data[3]
                 user['email'] = user_data[4]
                 user['username'] = user_data[5]
+                user['password']= user_data[6]
                 
 
                 return render_template('profile.html', user = user)        
@@ -257,7 +258,36 @@ def get_profile():
 @app.route("/updateuser", methods = ['POST', 'GET'])
 def update_user():
     if request.method == 'POST':
-        print("hola")
+        try:
+            user_id = request.form['userid']
+            name = request.form['name']
+            lastname1 = request.form['lastname1']
+            lastname2 = request.form['lastname2']
+            username = request.form['username']
+            password = request.form['password']
+
+            # converting password to array of bytes
+            bytes = password.encode('utf-8')
+            # generating the salt
+            salt = bcrypt.gensalt()
+            # Hashing the password
+            hash = bcrypt.hashpw(bytes, salt)
+
+            # connection to the on-disk database
+            with sql.connect(db_file) as con:
+                cur = con.cursor()
+                cur.execute("UPDATE users SET name=?, lastname1=?, lastname2=?, username=?, password=? WHERE user_id=?",(name, lastname1, lastname2,username, hash, user_id,))
+                con.commit()
+                print("User successfully updated")
+                return redirect('/home') 
+        except BaseException as e:
+            print(e)
+            con.rollback()
+            msg = "Error while getting user"
+            return render_template('result.html', msg = msg) 
+
+
+
 
 
 if __name__ == '__main__':
