@@ -11,6 +11,7 @@ app.secret_key = 'any random string'
 def create_schema_users():
     with sql.connect(db_file) as con:
         cur = con.cursor()
+        cur.execute("PRAGMA foreign_keys = ON")
         try:
             cur.execute( """
                         CREATE TABLE users(user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, lastname1 TEXT NOT NULL, 
@@ -24,8 +25,11 @@ def create_schema_packages():
     with sql.connect(db_file) as con:
         cur = con.cursor()
         try:
-            cur.execute("PRAGMA foreign_keys = ON")
-            cur.execute("CREATE TABLE packages(package_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, lat INTEGER, lon INTEGER, price FLOAT, user_id TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE )")
+            
+            cur.execute("""
+                        CREATE TABLE packages(package_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, lat INTEGER, lon INTEGER,
+                         price FLOAT, user_id TEXT NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE )
+                    """)
             con.commit()
         except sql.OperationalError:
             pass
@@ -246,7 +250,6 @@ def get_profile():
                 user['username'] = user_data[5]
                 user['password']= user_data[6]
                 
-
                 return render_template('profile.html', user = user)        
         except BaseException as e:
             print(e)
@@ -272,6 +275,7 @@ def update_user():
             salt = bcrypt.gensalt()
             # Hashing the password
             hash = bcrypt.hashpw(bytes, salt)
+            
 
             # connection to the on-disk database
             with sql.connect(db_file) as con:
@@ -279,12 +283,36 @@ def update_user():
                 cur.execute("UPDATE users SET name=?, lastname1=?, lastname2=?, username=?, password=? WHERE user_id=?",(name, lastname1, lastname2,username, hash, user_id,))
                 con.commit()
                 print("User successfully updated")
+                session['user'] = (password,user_id,name)
                 return redirect('/home') 
         except BaseException as e:
             print(e)
             con.rollback()
             msg = "Error while getting user"
             return render_template('result.html', msg = msg) 
+
+@app.route("/deleteuser", methods = ['POST', 'GET'])
+def delete_user():
+    if request.method == 'POST':
+        try:
+            user_id = request.form['id-delete']
+            # connection to the on-disk database
+            with sql.connect(db_file) as con:
+                cur = con.cursor()
+                cur.execute("DELETE FROM users WHERE user_id=?",(user_id,))
+                con.commit()
+                print("User successfully deleted")
+                session['user'] = None
+                return redirect('/home')
+        except BaseException as e:
+            print(e)
+            con.rollback()
+            msg = "Error while deleting user"
+            return render_template('result.html', msg = msg)
+
+            
+
+    
 
 
 
