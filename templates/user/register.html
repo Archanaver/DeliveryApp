@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <form action = "{{ url_for('add_user')}}" method = "POST">
         <h3>Register</h3>
+        <form action = "{{ url_for('user_bp.register')}}" method = "POST">
         Name
         <input type="text" name ="name"/>
         First last name

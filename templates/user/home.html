@@ -5,7 +5,9 @@
     <h1>Welcome {{user[2]}} !</h1>
     <body>
         <div>
-            <button onClick="window.location.href='/enterpackage';">Add package</button>
+            <form action = "{{ url_for('package_bp.create')}}" method = "GET">
+                <input type = "submit" value = "Add package" />
+            </form>
         </div>
         
         <br>
@@ -28,12 +30,12 @@
                 <td>{{ package[2] }}</td>
                 <td>{{ package[3] }}</td>
                 <td>
-                    <form action = "{{ url_for('delete_package')}}" method = "POST">
+                    <form action = "{{ url_for('package_bp.delete')}}" method = "POST">
                         <button type="submit" name="id-delete" value="{{ package[0] }}">Delete</button>
                     </form> 
                 </td>
                 <td>
-                    <form action = "{{ url_for('update_package')}}" method = "POST">
+                    <form action = "{{ url_for('package_bp.get_update_form')}}" method = "POST">
                         <button type="submit" name="id-update" value="{{ package[0] }}">Update</button>
                         <input type="hidden" name="lat" value="{{ package[1] }}">
                         <input type="hidden" name="lon" value="{{ package[2] }}">
